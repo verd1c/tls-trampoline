@@ -1,1 +1,1 @@
-clang++ -Iinclude/ .\src\main.cpp .\src\headers.cpp .\src\pe.cpp .\src\utils.cpp
+clang++ -g -Wall -Wextra -Iinclude/ .\src\main.cpp .\src\headers.cpp .\src\pe.cpp .\src\utils.cpp

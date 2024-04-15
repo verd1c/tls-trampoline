@@ -53,6 +53,17 @@ public:
     COFF_HEADER( std::vector<u8>, i32 );
 };
 
+class DataDirectory {
+public:
+    std::string name;
+    u32 base;
+    u32 size;
+
+    DataDirectory( );
+    DataDirectory( std::string, u32, u32 );
+};
+
+
 class OptionalHeader { 
 public:
     u16 magic;
@@ -65,7 +76,7 @@ public:
     u32 base_of_code;                   // RVA
     u32 base_of_data;                   // RVA
 
-    u32 image_base;
+    u64 image_base;
     u32 section_alignment;
     u32 file_alignment;
     u16 major_operating_system_version;
@@ -80,26 +91,50 @@ public:
     u32 checksum;
     u16 subsystem;
     u16 dll_characteristics;
-    u32 size_of_stack_reserve;
-    u32 size_of_stack_commit;
-    u32 size_of_heap_reserve;
-    u32 size_of_heap_commit;
+    u64 size_of_stack_reserve;
+    u64 size_of_stack_commit;
+    u64 size_of_heap_reserve;
+    u64 size_of_heap_commit;
     u32 loader_flags;
     u32 number_of_rva_and_sizes;
 
+    u64 sections_offset; // for use later
+
+    std::vector<DataDirectory *> directories = { };
+
     OptionalHeader( );
     OptionalHeader( std::vector<u8>, i32 );
+};
+
+class SectionHeader {
+public:
+    std::string name;
+    u32 virtual_size;
+    u32 virtual_address;
+    u32 size_of_raw_data;
+    u32 pointer_to_raw_data;
+    u32 pointer_to_relocations;
+    u32 pointer_to_linenumbers;
+    u16 number_of_relocations;
+    u16 number_of_linenumbers;
+    u32 characteristics;
+
+    SectionHeader( );
+    SectionHeader( std::string, u32, u32, u32, u32, u32, u32, u16, u16, u32 );
 };
 
 class PE_HEADER {
 public: 
     COFF_HEADER coff_header;
     OptionalHeader optional_header;
+    std::vector<SectionHeader> sections;
 
     size_t size;
 
     PE_HEADER( );
     PE_HEADER( std::vector<u8>, i32 );
+
+    void initialize_sections( std::vector<u8> );
 
 };
 
