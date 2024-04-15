@@ -48,7 +48,7 @@ int main() {
     pe.pe_header.coff_header.num_of_sections += 1;
     pe.pe_header.sections.push_back(SectionHeader(
         std::string(".tramp"),
-        0x10,
+        tlstramp_section.data.size(),
         0x8000,
         tlstramp_section.data.size(),
         0x2A00 + 0x200,
@@ -56,7 +56,7 @@ int main() {
         0x0,
         0x0,
         0x0,
-        0x42000040
+        0x42000020
     ));
 
     pe.save( "./fixed.exe" );
